@@ -75,10 +75,10 @@ W1D1 环境
 
 **任务清单**
 
-- [ ] 安装 JDK 17（推荐 Temurin 或 Oracle），配置 `JAVA_HOME` 与 `PATH`
-- [ ] 安装 Maven 3.9.x，配置阿里云镜像（`conf/settings.xml` 的 `<mirrors>`）
-- [ ] 安装 IDEA，装插件：Lombok、MyBatisX、Rainbow Brackets（可选）
-- [ ] 安装 MySQL 8（本机已有 8.4 则跳过，确认服务已启动且记得 root 密码）
+- [x] 安装 JDK 17（推荐 Temurin 或 Oracle），配置 `JAVA_HOME` 与 `PATH`
+- [x] 安装 Maven 3.9.x，配置阿里云镜像（`conf/settings.xml` 的 `<mirrors>`）
+- [x] 安装 IDEA，装插件：Lombok、MyBatisX、Rainbow Brackets（可选）
+- [x] 安装 MySQL 8（本机已有 8.4 则跳过，确认服务已启动且记得 root 密码）
 - [x] 安装 Redis 5.0.14 Windows 版（tporadowski 移植版），注册为 Windows 服务
 - [x] 安装 Erlang/OTP 26.x（**必须先装**），再安装 RabbitMQ 3.13.x
 - [x] 开启 RabbitMQ 管理插件，浏览器能打开 `http://localhost:15672`
@@ -96,8 +96,8 @@ redis-cli ping                # 返回 PONG（先确认 Redis 服务已启动）
 rabbitmqctl status            # 输出 RabbitMQ 版本与 Erlang 版本，无报错
 ```
 
-- [ ] `http://localhost:15672` 能用 `guest/guest` 登录（本地开发阶段允许，部署时必须改）
-- [ ] IDEA 能正常创建 Java 17 项目
+- [×] `http://localhost:15672` 能用 `guest/guest` 登录（本地开发阶段允许，部署时必须改）
+- [x] IDEA 能正常创建 Java 17 项目
 
 **常见坑**
 
