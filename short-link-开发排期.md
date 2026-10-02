@@ -1,6 +1,6 @@
 # 分布式短链接系统 · 四周开发排期（逐日对照清单）
 
-> 配套文档：[短链接项目-开发文档.md](./短链接项目-开发文档.md)（设计原理、DDL、技术方案、部署、简历包装）
+> 配套文档：[short-link-开发文档.md](./short-link-开发文档.md)（设计原理、DDL、技术方案、部署、简历包装）
 > 本文档是**开发时的操作手册**：每天照着 checklist 打勾，做完当天的「验收」再往下走。
 > 节奏假设：每天 3~4 小时有效开发时间。**进度落后不要跳验收**，宁可砍功能（见附录 A 降级策略）。
 
@@ -120,10 +120,10 @@ rabbitmqctl status            # 输出 RabbitMQ 版本与 Erlang 版本，无报
 **任务清单**
 
 - [ ] 新建工程目录结构：`short-link-project/`（后端）、`sql/`、`docs/`
-- [ ] 创建 `sql/schema.sql`：从主文档 [第 4 章](./短链接项目-开发文档.md#4-数据库设计) 复制全部 DDL
+- [ ] 创建 `sql/schema.sql`：从主文档 [第 4 章](./short-link-开发文档.md#4-数据库设计) 复制全部 DDL
 - [ ] 建库 `short_link`（`utf8mb4` / `utf8mb4_general_ci`），执行 `schema.sql`
 - [ ] 手工插入一条测试用户和一条测试分组，确认字段可用
-- [ ] 创建 `RedisKeyConstant`：把主文档 [第 5 章](./短链接项目-开发文档.md#5-redis-key-设计) 的 17 个 Key 全部写成常量 + 拼接方法
+- [ ] 创建 `RedisKeyConstant`：把主文档 [第 5 章](./short-link-开发文档.md#5-redis-key-设计) 的 17 个 Key 全部写成常量 + 拼接方法
 - [ ] 更新 Redis 配置文件：`maxmemory 256mb`、`maxmemory-policy volatile-lru`、`appendonly yes`
 
 `RedisKeyConstant` 参考写法：
@@ -222,7 +222,7 @@ redis-cli -a 你的密码 config get maxmemory-policy   # 返回 volatile-lru
 **任务清单**
 
 - [ ] 用 IDEA 创建 Spring Boot 工程（Spring Initializr 或手写 pom）
-- [ ] 写 `pom.xml`：按主文档 [8.1 节](./短链接项目-开发文档.md#81-maven-依赖关键坐标) 引入全部依赖
+- [ ] 写 `pom.xml`：按主文档 [8.1 节](./short-link-开发文档.md#81-maven-依赖关键坐标) 引入全部依赖
 - [ ] 建立分包结构（controller / service / dao / entity / dto / vo / common / mq / job / util）
 - [ ] 写启动类 `ShortLinkApplication`（`@SpringBootApplication`、`@MapperScan`、`@EnableScheduling`、`@EnableAsync`）
 - [ ] 写 `application.yml` + `application-dev.yml`（数据库、Redis、RabbitMQ 连接信息，密码先用本地值）
@@ -574,7 +574,7 @@ private TGroup checkOwnership(String gid) {
 
 **任务清单**
 
-- [ ] `Base62Util`：`encode(long)` / `decode(String)` / `random(int length)`（按主文档 [7.1](./短链接项目-开发文档.md#71-短链生成算法)）
+- [ ] `Base62Util`：`encode(long)` / `decode(String)` / `random(int length)`（按主文档 [7.1](./short-link-开发文档.md#71-短链生成算法)）
 - [ ] `HashUtil.md5(String)`：生成 `originUrlHash`
 - [ ] `ShortUriGenerator`：生成 6 位后缀 + 查重逻辑
 - [ ] `LinkUtil`：拼接完整短链 `domain + "/" + gid + "/" + shortUri`
@@ -895,7 +895,7 @@ public void redirect(@PathVariable String shortUri, HttpServletResponse response
 
 **任务清单**
 
-- [ ] 写 `resources/lua/rate_limit_sliding_window.lua`（主文档 [7.5](./短链接项目-开发文档.md#75-限流防刷redis--lua-滑动窗口)）
+- [ ] 写 `resources/lua/rate_limit_sliding_window.lua`（主文档 [7.5](./short-link-开发文档.md#75-限流防刷redis--lua-滑动窗口)）
 - [ ] `RateLimitProperties` / `LimitType` 枚举（`IP` / `USER`）
 - [ ] `@RateLimit` 注解：`type`、`window`（秒）、`limit`、`message`
 - [ ] `RateLimitAspect`：
@@ -1082,7 +1082,7 @@ private void deleteCacheAndDoubleDelete(String gid, String shortUri) {
   - [ ] 两组 `Binding`
   - [ ] `Jackson2JsonMessageConverter`（**必须配，否则消息体是二进制**）
   - [ ] `RabbitTemplate` 设置 `setMandatory(true)` 以触发 ReturnsCallback
-- [ ] `application.yml` 补全 `spring.rabbitmq` 配置（主文档 [8.2](./短链接项目-开发文档.md#82-applicationyml-关键片段)）
+- [ ] `application.yml` 补全 `spring.rabbitmq` 配置（主文档 [8.2](./short-link-开发文档.md#82-applicationyml-关键片段)）
 - [ ] `AccessLogMessage` 消息体（含 `msgId`、`linkId`、`fullShortUrl`、`gid`、`shortUri`、`user`、`ip`、`browser`、`os`、`deviceType`、`locale`、`accessTime`）
 
 ```java
@@ -1846,7 +1846,7 @@ export default defineConfig({
 
 | 坑 | 现象 | 解决 |
 | --- | --- | --- |
-| 2G 内存 OOM | 进程被系统杀掉，服务时好时坏 | 严格按主文档 [11.1](./短链接项目-开发文档.md#111-资源规划2-核-2g非常紧张必须限制内存) 限制内存；必要时把 RabbitMQ 换成 Redis Stream |
+| 2G 内存 OOM | 进程被系统杀掉，服务时好时坏 | 严格按主文档 [11.1](./short-link-开发文档.md#111-资源规划2-核-2g非常紧张必须限制内存) 限制内存；必要时把 RabbitMQ 换成 Redis Stream |
 | 代码里写死了 `localhost:8000` 作为短链域名 | 生成的短链指向 localhost，别人打不开 | 域名走配置项 `short-link.domain`，部署时改为服务器 IP |
 | 历史数据域名没更新 | 老短链仍是 localhost | 执行 `UPDATE t_link SET full_short_url = REPLACE(full_short_url, 'http://localhost:8000', 'http://服务器IP');` 并清理旧缓存 |
 | Nginx 反代后 IP 全是 127.0.0.1 | 统计和限流失真 | 必配 `X-Real-IP` / `X-Forwarded-For` |
@@ -1877,9 +1877,9 @@ export default defineConfig({
   - [ ] 删除无用的 `System.out.println`
   - [ ] 确认没有把密码、服务器 IP 提交到 Git
   - [ ] 补充关键代码注释（尤其是并发、缓存、幂等相关逻辑，面试官可能直接看代码）
-- [ ] 简历描述定稿（用主文档 [13.1](./短链接项目-开发文档.md#131-简历写法可直接改数字使用) 的模板，**把括号里的 xx 换成真实压测数据**）
-- [ ] 面试稿自测：把主文档 [13.2 的 15 个问题](./短链接项目-开发文档.md#132-高频面试问答提前背熟) 逐条口头讲一遍，**录下来回听**
-- [ ] 演示视频录制（3 分钟内，按主文档 [13.3](./短链接项目-开发文档.md#133-演示准备) 的顺序）
+- [ ] 简历描述定稿（用主文档 [13.1](./short-link-开发文档.md#131-简历写法可直接改数字使用) 的模板，**把括号里的 xx 换成真实压测数据**）
+- [ ] 面试稿自测：把主文档 [13.2 的 15 个问题](./short-link-开发文档.md#132-高频面试问答提前背熟) 逐条口头讲一遍，**录下来回听**
+- [ ] 演示视频录制（3 分钟内，按主文档 [13.3](./short-link-开发文档.md#133-演示准备) 的顺序）
 - [ ] Git 整理：确认提交历史清晰，主分支可运行
 
 **验收（第 4 周暨项目总验收）**
