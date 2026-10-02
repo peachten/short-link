@@ -190,14 +190,12 @@ CREATE TABLE t_link_locale_stats (
 ) ENGINE = InnoDB COMMENT ='地区维度统计';
 
 -- =============================================================
--- 测试数据（D2 验收用：确认字段可用；D5 用户模块做完后可用注册接口重建）
+-- 测试数据（D2 验收用：确认字段可用）
 -- =============================================================
--- 说明：D2 阶段还没有 Spring Boot 工程，无法用 Hutool 生成 BCrypt 密文，
--- 这里先放一个格式合法的占位密文，明文对应关系在 D5 用注册接口创建时确定。
--- 若 D5 直接用这个账号登录，请先用 Hutool 生成真实密文再 UPDATE 覆盖：
---   String hash = BCrypt.hashpw("123456");
+-- 密码为 BCrypt 密文，明文是 123456，可直接用于登录联调。
+-- 需要其他密码时用注册接口创建，或用 Hutool 生成：BCrypt.hashpw("你的密码")
 INSERT INTO t_user (username, password, real_name, mail)
-VALUES ('peachten', '$2a$10$01234567890123456789012345678901234567890123456789012', '测试用户', 'peachten@example.com');
+VALUES ('peachten', '$2a$10$pj03XKFS0OOgCN1BuaRPx.Eua1QaDG52KDHOk7AsRmGaV73r.bwLu', '测试用户', 'peachten@example.com');
 
 INSERT INTO t_group (gid, name, username, sort_order)
 VALUES ('testGp', '默认分组', 'peachten', 0);
