@@ -1,0 +1,32 @@
+server:
+  port: 8000
+
+spring:
+  application:
+    name: short-link-project
+  profiles:
+    active: dev
+
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      logic-delete-field: delFlag      # 逻辑删除字段，对应所有表的 del_flag
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+sa-token:
+  token-name: Authorization            # 请求头名字统一用 Authorization
+  timeout: 2592000                     # 30 天
+  is-concurrent: true
+  token-style: uuid
+
+short-link:
+  domain:
+    default: http://localhost:8000
+  base-url: http://localhost:8000
+  bloom:
+    expected-insertions: 1000000
+    fpp: 0.01
