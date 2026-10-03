@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.peachten.shortlink.dao.GroupMapper">
+
+    <!--
+      联表统计分组内短链数量。
+      开启 map-underscore-to-camel-case 后 link_count -> linkCount 自动映射。
+      当下 t_link 无数据，COUNT 返回 0，SQL 先跑通。
+    -->
+    <select id="selectGroupWithLinkCount" resultType="com.peachten.shortlink.vo.GroupRespVO">
+        SELECT g.id,
+               g.gid,
+               g.name,
+               g.sort_order,
+               g.create_time,
+               COUNT(l.id) AS link_count
+        FROM t_group g
+                 LEFT JOIN t_link l ON g.gid = l.gid AND l.del_flag = 0
+        WHERE g.username = #{username}
+          AND g.del_flag = 0
+        GROUP BY g.id
+        ORDER BY g.sort_order ASC, g.create_time DESC
+    </select>
+
+    <select id="countLinkByGid" resultType="int">
+        SELECT COUNT(*)
+        FROM t_link
+        WHERE gid = #{gid}
+          AND del_flag = 0
+    </select>
+
+</mapper>

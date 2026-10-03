@@ -22,6 +22,8 @@ public enum ResultCode {
     LOGIN_FAILED("A0005", "用户名或密码错误"),
     NOT_LOGIN("A0006", "未登录"),
     NO_PERMISSION("A0007", "无权限访问"),
+    GROUP_NOT_FOUND("A0008", "分组不存在"),
+    GROUP_HAS_LINK("A0009", "分组下存在短链，无法删除"),
 
     /* ---------- B：服务端 ---------- */
     SYSTEM_ERROR("B0001", "系统异常");
