@@ -9,12 +9,12 @@ import com.peachten.shortlink.dto.GroupSaveReqDTO;
 import com.peachten.shortlink.dto.GroupUpdateReqDTO;
 import com.peachten.shortlink.entity.TGroup;
 import com.peachten.shortlink.service.GroupService;
+import com.peachten.shortlink.util.Base62Util;
 import com.peachten.shortlink.vo.GroupRespVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -80,11 +80,11 @@ public class GroupServiceImpl implements GroupService {
 
     /**
      * 生成 6 位 gid。
-     * 当前先用 UUID 前 6 位过渡，W2D1 引入 Base62Util 后替换为 Base62Util.random(6)。
+     * 用 Base62 随机后缀（不可枚举），撞上已存在的 gid 时重试，唯一索引兜底。
      */
     private String generateGid() {
         for (int i = 0; i < GID_RETRY; i++) {
-            String gid = UUID.randomUUID().toString().replace("-", "").substring(0, 6);
+            String gid = Base62Util.random(6);
             boolean exists = groupMapper.selectCount(
                     Wrappers.lambdaQuery(TGroup.class).eq(TGroup::getGid, gid)) > 0;
             if (!exists) {
