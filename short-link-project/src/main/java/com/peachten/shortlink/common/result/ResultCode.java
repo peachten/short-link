@@ -24,6 +24,7 @@ public enum ResultCode {
     NO_PERMISSION("A0007", "无权限访问"),
     GROUP_NOT_FOUND("A0008", "分组不存在"),
     GROUP_HAS_LINK("A0009", "分组下存在短链，无法删除"),
+    SHORT_URI_EXIST("A0010", "短链后缀已被占用"),
 
     /* ---------- B：服务端 ---------- */
     SYSTEM_ERROR("B0001", "系统异常");

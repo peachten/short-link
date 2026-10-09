@@ -69,7 +69,8 @@ public class GroupServiceImpl implements GroupService {
      * 归属校验：分组必须存在且属于当前登录用户。
      * 两种情况返回同一个提示，避免暴露"该分组属于别人"这一信息。
      */
-    private TGroup checkOwnership(String gid) {
+    @Override
+    public TGroup checkOwnership(String gid) {
         TGroup group = groupMapper.selectOne(
                 Wrappers.lambdaQuery(TGroup.class).eq(TGroup::getGid, gid));
         if (group == null || !group.getUsername().equals(StpUtil.getLoginIdAsString())) {
