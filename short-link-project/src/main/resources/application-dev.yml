@@ -34,3 +34,8 @@ spring:
         max-concurrency: 5
         retry:
           enabled: false                 # 重试交给死信队列，不用本地重试
+
+mybatis-plus:
+  configuration:
+    # 开发期打印 SQL：用于验证布隆过滤器 / 缓存是否真的拦住了 DB 查询
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

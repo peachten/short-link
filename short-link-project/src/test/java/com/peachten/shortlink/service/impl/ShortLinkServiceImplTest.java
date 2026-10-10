@@ -5,6 +5,7 @@ import com.peachten.shortlink.dao.LinkMapper;
 import com.peachten.shortlink.dto.ShortLinkCreateReqDTO;
 import com.peachten.shortlink.entity.TGroup;
 import com.peachten.shortlink.entity.TLink;
+import com.peachten.shortlink.service.BloomFilterService;
 import com.peachten.shortlink.service.GroupService;
 import com.peachten.shortlink.util.ShortUriGenerator;
 import com.peachten.shortlink.vo.ShortLinkCreateRespVO;
@@ -57,6 +58,8 @@ class ShortLinkServiceImplTest {
     private GroupService groupService;
     @Mock
     private ShortUriGenerator shortUriGenerator;
+    @Mock
+    private BloomFilterService bloomFilterService;
     @Mock
     private RedissonClient redissonClient;
     @Mock

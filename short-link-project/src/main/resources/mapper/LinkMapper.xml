@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.peachten.shortlink.dao.LinkMapper">
+
+    <!-- 布隆过滤器预热：所有存在有效短链的分组 -->
+    <select id="selectAllValidGids" resultType="java.lang.String">
+        SELECT DISTINCT gid
+        FROM t_link
+        WHERE del_flag = 0
+          AND enable_status = 0
+    </select>
+
+    <!-- 布隆过滤器预热：按 gid 分批扫描有效短链，避免一次性把整组数据读进内存 -->
+    <select id="selectValidByGid" resultType="com.peachten.shortlink.entity.TLink">
+        SELECT id, gid, short_uri
+        FROM t_link
+        WHERE gid = #{gid}
+          AND del_flag = 0
+          AND enable_status = 0
+        ORDER BY id
+        LIMIT #{offset}, #{size}
+    </select>
+
+</mapper>

@@ -7,6 +7,7 @@ import com.peachten.shortlink.common.result.ResultCode;
 import com.peachten.shortlink.dao.LinkMapper;
 import com.peachten.shortlink.dto.ShortLinkCreateReqDTO;
 import com.peachten.shortlink.entity.TLink;
+import com.peachten.shortlink.service.BloomFilterService;
 import com.peachten.shortlink.service.GroupService;
 import com.peachten.shortlink.service.ShortLinkService;
 import com.peachten.shortlink.util.HashUtil;
@@ -40,6 +41,7 @@ public class ShortLinkServiceImpl implements ShortLinkService {
     private final ShortUriGenerator shortUriGenerator;
     private final RedissonClient redissonClient;
     private final StringRedisTemplate stringRedisTemplate;
+    private final BloomFilterService bloomFilterService;
 
     @Value("${short-link.domain.default:http://localhost:8000}")
     private String defaultDomain;
@@ -130,6 +132,9 @@ public class ShortLinkServiceImpl implements ShortLinkService {
         String setKey = RedisKeyConstant.gidSet(req.getGid());
         stringRedisTemplate.opsForSet().add(setKey, shortUri);
         stringRedisTemplate.expire(setKey, Duration.ofDays(1));
+
+        // 写入布隆过滤器，跳转时用于拦截不存在的短链（防缓存穿透）
+        bloomFilterService.add(req.getGid(), shortUri);
 
         return buildResp(link, false);
     }
